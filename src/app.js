@@ -10,4 +10,9 @@ app.get("/api", (req, res) => {
     });
 });
 
+const oportunidadesRoutes = require('./routes/oportunidades.routes')
+
+app.use('/api/oportunidades', oportunidadesRoutes)
+
+
 module.exports = app;
