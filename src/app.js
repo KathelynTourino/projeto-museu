@@ -19,6 +19,9 @@ app.use((req, res) => {
         erro: 'Rota não encontrada'
     });
 });
+const voluntariosRoutes = require('./routes/voluntarios.routes');
+
+app.use('/api/voluntarios', voluntariosRoutes);
 
 
 module.exports = app;
