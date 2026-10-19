@@ -1,15 +1,16 @@
 {
   "name": "projeto-museu",
   "version": "1.0.0",
-  "description": "",
+  "description": "api do projeto-museu",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "kathelyn Tourino, lLticia Favero, Sofia Carolini e Jean Bueno",
   "license": "ISC",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2"
   }
 }
