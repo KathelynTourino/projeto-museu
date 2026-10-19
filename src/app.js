@@ -14,6 +14,11 @@ const oportunidadesRoutes = require('./routes/oportunidades.routes')
 
 app.use('/api/oportunidades', oportunidadesRoutes)
 
+app.use((req, res) => {
+    res.status(404).json({
+        erro: 'Rota não encontrada'
+    });
+});
 const voluntariosRoutes = require('./routes/voluntarios.routes');
 
 app.use('/api/voluntarios', voluntariosRoutes);
