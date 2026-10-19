@@ -68,3 +68,5 @@ const validarOportunidade = [
     .withMessage('O status deve ser aberta, encerrada ou cancelada')
 
 ]
+
+ module.exports = { validarOportunidade }
