@@ -1,5 +1,5 @@
 
-const { pool } = require('../data/candidaturas')
+const { pool } = require("../data/candidaturas")
 
 const consultaCandidatura = 'SELECT * FROM candidaturas'
 
