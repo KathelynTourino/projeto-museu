@@ -1,100 +1,70 @@
 
-const { pool } = require("../data/candidaturas")
+const candidaturas = require('../data/candidaturas')
 
-const consultaCandidatura = 'SELECT * FROM candidaturas'
+function listar() {
+    return candidaturas
+}
 
-function montarCandidatura(linha) {
-    return {
-        id: linha.id,
-        cliente_id: linha.cliente_id,
-        vaga: linha.vaga,
-        descricao: linha.descricao,
-        data_candidatura: linha.data_candidatura,
-        status: linha.status,
-        observacoes: linha.observacoes,
-        criado_em: linha.criado_em,
-        atualizado_em: linha.atualizado_em
+function buscarPorId(id) {
+    return candidaturas.find(
+        candidatura => candidatura.id === Number(id)
+    ) || null
+}
+
+function criar(dadosCandidatura) {
+    const novaCandidatura = {
+        id: candidaturas.length > 0
+            ? Math.max(...candidaturas.map(c => c.id)) + 1
+            : 1,
+        nome: dadosCandidatura.nome,
+        email: dadosCandidatura.email,
+        telefone: dadosCandidatura.telefone,
+        area: dadosCandidatura.area,
+        disponibilidade: dadosCandidatura.disponibilidade,
+        ativo: dadosCandidatura.ativo ?? true
     }
+
+    candidaturas.push(novaCandidatura)
+
+    return novaCandidatura
 }
 
-async function listar() {
-    const [linhas] = await pool.query(consultaCandidatura)
-    return linhas.map(montarCandidatura)
-}
-
-async function buscarPorId(id) {
-    const [linhas] = await pool.query(
-        `${consultaCandidatura} WHERE id = ?`,
-        [id]
+function atualizar(id, dadosCandidatura) {
+    const indice = candidaturas.findIndex(
+        candidatura => candidatura.id === Number(id)
     )
 
-    if (linhas.length === 0) {
+    if (indice === -1) {
         return null
     }
 
-    return montarCandidatura(linhas[0])
-}
-
-async function criar(dadosCandidatura) {
-    const candidatura = {
-        cliente_id: dadosCandidatura.cliente_id,
-        vaga: dadosCandidatura.vaga,
-        descricao: dadosCandidatura.descricao ?? null,
-        data_candidatura: dadosCandidatura.data_candidatura ?? new Date(),
-        status: dadosCandidatura.status ?? 'Pendente',
-        observacoes: dadosCandidatura.observacoes ?? null
+    candidaturas[indice] = {
+        id: Number(id),
+        nome: dadosCandidatura.nome,
+        email: dadosCandidatura.email,
+        telefone: dadosCandidatura.telefone,
+        area: dadosCandidatura.area,
+        disponibilidade: dadosCandidatura.disponibilidade,
+        ativo: dadosCandidatura.ativo ?? true
     }
 
-    const sql = 'INSERT INTO candidaturas SET ?'
-    const [resultado] = await pool.query(sql, [candidatura])
-
-    return buscarPorId(resultado.insertId)
+    return candidaturas[indice]
 }
 
-async function atualizar(id, dadosCandidatura) {
-    const conexao = await pool.getConnection()
-
-    try {
-        await conexao.beginTransaction()
-
-        const [resultadoCandidatura] = await conexao.execute(
-            `UPDATE candidaturas
-             SET cliente_id = ?, vaga = ?, descricao = ?,
-                 data_candidatura = ?, status = ?, observacoes = ?
-             WHERE id = ?`,
-            [
-                dadosCandidatura.cliente_id,
-                dadosCandidatura.vaga,
-                dadosCandidatura.descricao ?? null,
-                dadosCandidatura.data_candidatura,
-                dadosCandidatura.status,
-                dadosCandidatura.observacoes ?? null,
-                id
-            ]
-        )
-
-        if (resultadoCandidatura.affectedRows === 0) {
-            await conexao.rollback()
-            return null
-        }
-
-        await conexao.commit()
-        return buscarPorId(id)
-    } catch (erro) {
-        await conexao.rollback()
-        throw erro
-    } finally {
-        conexao.release()
-    }
-}
-
-async function remover(id) {
-    const [resultado] = await pool.execute(
-        'DELETE FROM candidaturas WHERE id = ?',
-        [id]
+function excluir(id) {
+    const indice = candidaturas.findIndex(
+        candidatura => candidatura.id === Number(id)
     )
 
-    return resultado.affectedRows > 0
+    if (indice === -1) {
+        return null
+    }
+
+    const candidaturaExcluida = candidaturas[indice]
+
+    candidaturas.splice(indice, 1)
+
+    return candidaturaExcluida
 }
 
 module.exports = {
@@ -102,5 +72,5 @@ module.exports = {
     buscarPorId,
     criar,
     atualizar,
-    remover
+    excluir
 }
