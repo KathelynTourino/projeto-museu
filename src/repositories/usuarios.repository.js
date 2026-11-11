@@ -6,15 +6,14 @@ function listar() {
 
 // O identificador do usuário é o CPF, guardado como texto
 function buscarPorCpf(cpf) {
-    return usuarios.find(usuario => usuario.cpf === String(cpf)) || null
+    return usuarios.find(
+        usuario => usuario.cpf === String(cpf)
+    ) || null
 }
 
-// Compara sem diferenciar maiúsculas de minúsculas
 function buscarPorEmail(email) {
-    const emailBuscado = String(email).trim().toLowerCase()
-
     return usuarios.find(
-        usuario => usuario.email.toLowerCase() === emailBuscado
+        usuario => usuario.email === String(email)
     ) || null
 }
 
@@ -70,4 +69,11 @@ function excluir(cpf) {
     return usuarioExcluido
 }
 
-module.exports = { listar, buscarPorCpf, buscarPorEmail, criar, atualizar, excluir }
+module.exports = {
+    listar,
+    buscarPorCpf,
+    buscarPorEmail,
+    criar,
+    atualizar,
+    excluir
+}

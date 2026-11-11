@@ -44,8 +44,8 @@ const validarOportunidade = [
     .exists({ checkFalsy: true })
     .withMessage('A data da oportunidade é obrigatória')
     .bail()
-    .isISO8601({ strict: true, strictSeparator: true })
-    .withMessage('Use uma data válida no formato AAAA-MM-DD'),
+    .matches(/^(0[1-9]|[12]\d|3[01])\/(0[1-9]|1[0-2])$/)
+    .withMessage('A data deve estar no formato DD/MM'),
 
     body('local')
     .exists({ checkFalsy: true })
@@ -55,12 +55,12 @@ const validarOportunidade = [
     .isLength({ min: 3, max: 150 })
     .withMessage('O local deve ter entre 3 e 150 caracteres'),
 
-    body('horario')
+     body('horario')
     .exists({ checkFalsy: true })
     .withMessage('O horário da oportunidade é obrigatório')
     .bail()
-    .matches(/^([01]\d|2[0-3]):[0-5]\d$/)
-    .withMessage('O horário deve estar no formato HH:MM'),
+    .matches(/^([01]?\d|2[0-3]):[0-5]\d$/)
+    .withMessage('O horário deve estar no formato H:MM ou HH:MM'),
 
     body('status')
     .optional()

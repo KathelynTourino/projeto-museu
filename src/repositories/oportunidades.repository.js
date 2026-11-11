@@ -10,7 +10,8 @@ function buscarPorId(id) {
 
 function criar(dadosOportunidade) {
     const novaOportunidade = {
-        id: oportunidades.length + 1,
+        id: oportunidades.length > 0
+        ? Math.max(...oportunidades.map(oportunidade => oportunidade.id)) + 1 : 1,
         titulo: dadosOportunidade.titulo,
         descricao: dadosOportunidade.descricao,
         tipo: dadosOportunidade.tipo,
